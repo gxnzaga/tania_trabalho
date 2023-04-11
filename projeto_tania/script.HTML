@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Calculadora</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Calculadora</h1>
+    <form>
+      <label for="coeficient-a">A:</label>
+      <input type="number" id="coeficient-a" name="coeficient-a" required>
+      <br>
+      <label for="coeficient-b">B:</label>
+      <input type="number" id="coeficient-b" name="coeficient-b" required>
+      <br>
+      <label for="coeficient-c">C:</label>
+      <input type="number" id="coeficient-c" name="coeficient-c" required>
+      <br>
+      <label for="coeficient-d">D:</label>
+      <input type="number" id="coeficient-d" name="coeficient-d" required>
+      <br>
+      <label for="epsilon">Epsilon:</label>
+      <input type="number" id="epsilon" name="epsilon" required>
+      <br>
+      <button type="button" onclick="calculateBisection()">Calculate</button>
+    </form>
+    <div id="results"></div>
+    <script>
+      function calculateBisection() {
+        const a = parseFloat(document.getElementById("coeficient-a").value);
+        const b = parseFloat(document.getElementById("coeficient-b").value);
+        const c = parseFloat(document.getElementById("coeficient-c").value);
+        const d = parseFloat(document.getElementById("coeficient-d").value);
+        const epsilon = parseFloat(document.getElementById("epsilon").value);
+
+        const fx = (x) => a * Math.pow(x, 3) + b * Math.pow(x, 2) + c * x + d;
+
+        let left = -10;
+        let right = 10;
+        let intervals = [];
+        while (left < right) {
+          const mid = (left + right) / 2;
+          const fmid = fx(mid);
+          intervals.push({ left, right, mid, fmid });
+
+          if (Math.abs(fmid) < epsilon) {
+            break;
+          } else if (fx(left) * fmid < 0) {
+            right = mid;
+          } else {
+            left = mid;
+          }
+        }
+
+        let output = "<table><tr><th>Left</th><th>Right</th><th>Mid</th><th>f(Mid)</th></tr>";
+        for (const interval of intervals) {
+          output += `<tr><td>${interval.left.toFixed(6)}</td><td>${interval.right.toFixed(6)}</td><td>${interval.mid.toFixed(6)}</td><td>${interval.fmid.toFixed(6)}</td></tr>`;
+        }
+        output += "</table>";
+        document.getElementById("results").innerHTML = output;
+      }
+    </script>
+  </body>
+</html>
